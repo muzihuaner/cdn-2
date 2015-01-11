@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>静态JS/CSS公共CDN</title>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="https://dn-cdnjscn.qbox.me/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.css">
+	<style>body {font-family: "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;line-height: 1.8;}</style>
+</head>
+<body>
+
+<div class="navbar navbar-inverse navbar-static-top bs-docs-nav">
+	<div class="container">
+		<div class="navbar-header hidden-xs">
+			<a class="navbar-brand" href="#">静态JS/CSS公共CDN</a>
+		</div>
+	</div>
+</div>
+
+<div class="container">
+<div class="alert alert-info" role="alert">
+本站提供各种js/css库的国内CDN服务，使用的是<a href="http://www.qiniu.com/" target="_blank">七牛云存储</a>，同步源为<a href="https://cdnjs.com/" target="_blank">cdnjs</a>，因为用的是镜像，所以为实时同步</br>
+</div>
+<div ng-app="cdnjs" ng-controller="cdnjsCtrl" ng-init="">
+	<div class="row"> 
+		<div class="col-xs-4">
+			关键词过滤
+			<input class="form-control" ng-change="lib='';ver='';filtered = (libs | filter : libfilter | orderBy: 'toString()')" ng-model="libfilter"></input>
+		</div>
+		<div class="col-xs-4">
+			选择库 <span class="badge ng-cloak">{{filtered.length}}</span>
+			<select class="form-control" ng-model="lib" ng-change="ver='';" ng-options="opt for opt in filtered"></select>
+		</div>
+		<div class="col-xs-4">
+			选择版本 <span class="badge ng-cloak">{{data[lib]['v'].length}}</span>
+			<select class="form-control" ng-model="ver" ng-options="opt for opt in data[lib]['v']"></select>
+		</div>
+	</div>
+	<hr>
+	<ul class="list-group">
+		<li class="list-group-item" ng-repeat="item in data[lib]['i']" ng-show="lib != '' && ver != ''" ng-mouseover="canShow = true" ng-mouseleave="canShow = false">
+			<span class="ng-cloak">https://dn-cdnjscn.qbox.me/ajax/libs/{{lib + '/' + ver + '/' + item}}</span>
+			<div class="btn-group" ng-show="canShow">
+				<button type="button" class="btn btn-primary btn-xs">复制url</button>
+				<button type="button" class="btn btn-primary btn-xs">复制html</button>
+			</div>
+		</li>
+	</ul>
+	<script src="https://dn-cdnjscn.qbox.me/ajax/libs/angular.js/1.2.16/angular.js"></script>
+	<script src="https://dn-cdnjscn.qbox.me/ajax/libs/angular-ui-bootstrap/0.12.0/ui-bootstrap-tpls.js"></script>
+	<script>
+	
+		var cdnjs = angular.module('cdnjs', ['ui.bootstrap']);
+		cdnjs.controller('cdnjsCtrl', function ($scope, $log, $http) {
+			$scope.libfilter = '';
+			$scope.lib = '';
+			$scope.ver = '';
+			$scope.filtered = [];
+			$http.get('https://dn-cdnjscn.qbox.me/data.json').then(function(res){
+				$scope.data = res.data;
+				$scope.libs = [];
+				for(key in $scope.data){
+					$scope.libs.push(key);
+				}
+				$scope.filtered = $scope.libs;
+			});
+		});
+	</script>
+</div>
+</div>
+</body>
+</html>
