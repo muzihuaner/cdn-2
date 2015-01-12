@@ -4,7 +4,52 @@
 	<title>静态JS/CSS公共CDN</title>
 	<meta charset="UTF-8">
 	<link rel="stylesheet" href="https://dn-cdnjscn.qbox.me/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.css">
-	<style>body {font-family: "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;line-height: 1.8;}</style>
+	<style>
+	body {
+		font-family: "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+		line-height: 1.8;
+	}
+	ul li:hover{
+		background: #f5f5f5;
+	}
+	.switch {
+		background: #5bc0de;
+		border: 1px solid #dfdfdf;
+		position: relative;
+		display: inline-block;
+		box-sizing: content-box;
+		overflow: visible;
+		width: 42px;
+		height: 20px;
+		padding: 0px;
+		margin: 0px;
+		border-radius: 20px;
+		cursor: pointer;
+		box-shadow: rgb(223, 223, 223) 0px 0px 0px 0px inset;
+		transition: 0.3s ease-out all;
+		-webkit-transition: 0.3s ease-out all;
+		top: 2px;
+	}
+	.switch small {
+		background: #fff;
+		border-radius: 100%;
+		box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+		width: 20px;
+		height: 20px;
+		position: absolute;
+		top: 0px;
+		left: 0px;
+		transition: 0.3s ease-out all;
+		-webkit-transition: 0.3s ease-out all;
+	}
+	.switch.checked {
+		background: rgb(100, 189, 99);
+		-color: rgb(100, 189, 99);
+	}
+	.switch.checked small {
+		left: 22px;
+	}
+	</style>
 </head>
 <body>
 
@@ -20,7 +65,7 @@
 <div class="alert alert-info" role="alert">
 本站提供各种js/css库的国内CDN服务，使用的是<a href="http://www.qiniu.com/" target="_blank">七牛云存储</a>，同步源为<a href="https://cdnjs.com/" target="_blank">cdnjs</a>，因为用的是镜像，所以为实时同步</br>
 </div>
-<div ng-app="cdnjs" ng-controller="cdnjsCtrl" ng-init="">
+<div ng-app="cdnjs" ng-controller="cdnjsCtrl">
 	<div class="row"> 
 		<div class="col-xs-4">
 			关键词过滤
@@ -36,21 +81,43 @@
 		</div>
 	</div>
 	<hr>
+	<div>
+	</div>
 	<ul class="list-group">
-		<li class="list-group-item" ng-repeat="item in data[lib]['i']" ng-show="lib != '' && ver != ''" ng-mouseover="canShow = true" ng-mouseleave="canShow = false">
-			<span class="ng-cloak">https://dn-cdnjscn.qbox.me/ajax/libs/{{lib + '/' + ver + '/' + item}}</span>
-			<div class="btn-group" ng-show="canShow">
-				<button type="button" class="btn btn-primary btn-xs">复制url</button>
-				<button type="button" class="btn btn-primary btn-xs">复制html</button>
-			</div>
+		<li class="list-group-item" ng-repeat="item in data[lib]['i']" ng-show="lib != '' && ver != ''" ng-mouseover="canShow=true" ng-mouseleave="canShow=false">
+			<span class="ng-cloak" ng-hide="enabled">{{showUrl(item, false)}}</span>
+			<span class="ng-cloak" ng-show="enabled">{{showUrl(item, true)}}</span>
+			<switch title="URL <-> HTML" id="enabled" name="enabled" ng-model="enabled" class="green pull-right" ng-show="canShow"></switch>
 		</li>
 	</ul>
 	<script src="https://dn-cdnjscn.qbox.me/ajax/libs/angular.js/1.2.16/angular.js"></script>
 	<script src="https://dn-cdnjscn.qbox.me/ajax/libs/angular-ui-bootstrap/0.12.0/ui-bootstrap-tpls.js"></script>
 	<script>
-	
-		var cdnjs = angular.module('cdnjs', ['ui.bootstrap']);
-		cdnjs.controller('cdnjsCtrl', function ($scope, $log, $http) {
+		angular.module('uiSwitch', []).directive('switch', function(){
+		  return {
+			restrict: 'AE'
+		  , replace: true
+		  , transclude: true
+		  , template: function(element, attrs) {
+			  var html = '';
+			  html += '<span';
+			  html +=   ' class="switch' + (attrs.class ? ' ' + attrs.class : '') + '"';
+			  html +=   attrs.ngModel ? ' ng-click="' + attrs.ngModel + '=!' + attrs.ngModel + '"' : '';
+			  html +=   ' ng-class="{ checked:' + attrs.ngModel + ' }"';
+			  html +=   '>';
+			  html +=   '<small></small>';
+			  html +=   '<input type="checkbox"';
+			  html +=     attrs.id ? ' id="' + attrs.id + '"' : '';
+			  html +=     attrs.name ? ' name="' + attrs.name + '"' : '';
+			  html +=     attrs.ngModel ? ' ng-model="' + attrs.ngModel + '"' : '';
+			  html +=     ' style="display:none" />';
+			  html += '</span>';
+			  return html;
+			}
+		  }
+		});
+		var cdnjs = angular.module('cdnjs', ['ui.bootstrap', 'uiSwitch']);
+		cdnjs.controller('cdnjsCtrl', function ($scope, $http, $timeout) {
 			$scope.libfilter = '';
 			$scope.lib = '';
 			$scope.ver = '';
@@ -63,6 +130,13 @@
 				}
 				$scope.filtered = $scope.libs;
 			});
+			$scope.showUrl = function(item, isHtml){
+				var url = 'https://dn-cdnjscn.qbox.me/ajax/libs/' + $scope.lib + '/' + $scope.ver + '/' + item;
+				var subffix = url.split(".").pop();
+				if(subffix == "js" && isHtml) return '<script src="' + url + '"><\/script>';
+				if(subffix == "css" && isHtml) return '<link rel="stylesheet" href="' + url + '">';
+				return url;
+			};
 		});
 	</script>
 </div>
