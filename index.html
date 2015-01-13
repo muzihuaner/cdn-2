@@ -108,7 +108,7 @@
 			{{versInfo['description']}}
 		</div>
 	</div>
-	<span><span class="label label-success" ng-show="curVer != ''">Click && CTRL-C</span></span>
+	<span><span class="label label-info" ng-show="curVer != ''">Click && CTRL-C</span></span>
 	<ul class="list-group">
 		<li class="list-group-item" ng-repeat="item in versInfo['versinfo'][curVer]" ng-show="curVer != ''" ng-mouseover="canShow=true" ng-mouseleave="canShow=false">
 			<span class="ng-cloak" select-text>{{showUrl(item, showHtml)['url']}}</span>
