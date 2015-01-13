@@ -111,9 +111,8 @@
 	</div>
 	<ul class="list-group">
 		<li class="list-group-item" ng-repeat="item in versInfo['versinfo'][curVer]" ng-show="curLib != '' && curVer != ''" ng-mouseover="canShow=true" ng-mouseleave="canShow=false">
-			<span class="ng-cloak" ng-hide="enabled">{{showUrl(item, false)}}</span>
-			<span class="ng-cloak" ng-show="enabled">{{showUrl(item, true)}}</span>
-			<switch title="URL <-> HTML" id="enabled" name="enabled" ng-model="enabled" class="green pull-right" ng-show="canShow"></switch>
+			<span class="ng-cloak">{{showUrl(item, showHtml)}}</span>
+			<switch title="URL <-> HTML" ng-model="showHtml" class="green pull-right" ng-show="canShow"></switch>
 		</li>
 	</ul>
 	<script src="https://dn-cdnjscn.qbox.me/ajax/libs/angular.js/1.2.16/angular.min.js"></script>
@@ -174,11 +173,11 @@
 					});
 				}
 			}
-			$scope.showUrl = function(item, isHtml){
+			$scope.showUrl = function(item, showHtml){
 				var url = 'https://dn-cdnjscn.qbox.me/ajax/libs/' + $scope.curLib + '/' + $scope.curVer + '/' + item;
 				var subffix = url.split(".").pop();
-				if(subffix == "js" && isHtml) return '<script src="' + url + '"><\/script>';
-				if(subffix == "css" && isHtml) return '<link rel="stylesheet" href="' + url + '">';
+				if(subffix == "js" && showHtml) return '<script src="' + url + '"><\/script>';
+				if(subffix == "css" && showHtml) return '<link rel="stylesheet" href="' + url + '">';
 				return url;
 			};
 		});
