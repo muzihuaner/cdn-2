@@ -114,8 +114,8 @@
 	</div>
 	<span class="label label-info" ng-show="curVer != ''">Click && CTRL-C</span>
 	<ul class="list-group">
-		<li class="list-group-item" ng-repeat="item in versInfo['versinfo'][curVer]" ng-show="curVer != ''" ng-mouseover="canShow=true" ng-mouseleave="canShow=false">
-			<span select-text ng-bind="showUrl(item, showHtml)['url']"></span>
+		<li class="list-group-item" ng-repeat="item in versInfo['versinfo'][curVer]" ng-show="curVer != ''" ng-mouseover="canShow=true;" ng-mouseleave="canShow=false">
+			<span ng-mouseover="preLoad(showUrl(item, false)['url']);" select-text ng-bind="showUrl(item, showHtml)['url']"></span>
 			<switch title="URL <-> HTML" ng-model="showHtml" class="green pull-right" ng-show="canShow && showUrl(item, showHtml)['knownType']"></switch>
 		</li>
 	</ul>
@@ -203,7 +203,12 @@
 						$scope.versInfo = res.data;
 					});
 				}
-			}
+			};
+			$scope.preLoad = function(url){
+				$http.get(url).then(function(data){
+					// load resource onmouseover
+				});
+			};
 			$scope.showUrl = function(item, showHtml){
 				var url = 'https://dn-cdnjscn.qbox.me/ajax/libs/' + $scope.curLib + '/' + $scope.curVer + '/' + item;
 				var subffix = url.split(".").pop();
