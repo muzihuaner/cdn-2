@@ -4,6 +4,7 @@
 	<title>静态JS/CSS公共CDN</title>
 	<meta charset="UTF-8">
 	<link rel="stylesheet" href="https://dn-cdnjscn.qbox.me/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://dn-cdnjscn.qbox.me/ajax/libs/angular-loading-bar/0.6.0/loading-bar.min.css">
 	<style>
 	body {
 		font-family: "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
@@ -99,6 +100,8 @@
 	</ul>
 	<script src="https://dn-cdnjscn.qbox.me/ajax/libs/angular.js/1.2.16/angular.min.js"></script>
 	<script src="https://dn-cdnjscn.qbox.me/ajax/libs/angular-ui-bootstrap/0.12.0/ui-bootstrap-tpls.min.js"></script>
+	<script src="https://dn-cdnjscn.qbox.me/ajax/libs/angular.js/1.2.0/angular-animate.min.js"></script>
+	<script src="https://dn-cdnjscn.qbox.me/ajax/libs/angular-loading-bar/0.6.0/loading-bar.min.js"></script>
 	<script>
 		angular.module('uiSwitch', []).directive('switch', function(){
 		  return {
@@ -123,7 +126,7 @@
 			}
 		  }
 		});
-		var cdnjs = angular.module('cdnjs', ['ui.bootstrap', 'uiSwitch']);
+		var cdnjs = angular.module('cdnjs', ['ui.bootstrap', 'uiSwitch', 'angular-loading-bar', 'ngAnimate']);
 		cdnjs.controller('cdnjsCtrl', function ($scope, $http){
 			$scope.filterWords = '';
 			$scope.curLib = '';
