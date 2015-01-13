@@ -5,6 +5,7 @@
 	<meta charset="UTF-8">
 	<link rel="stylesheet" href="https://dn-cdnjscn.qbox.me/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://dn-cdnjscn.qbox.me/ajax/libs/angular-loading-bar/0.6.0/loading-bar.min.css">
+	<link rel="stylesheet" href="https://dn-cdnjscn.qbox.me/ajax/libs/animate.css/3.2.0/animate.min.css">
 	<style>
 	body {
 		font-family: "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
@@ -63,6 +64,10 @@
 		border-top-color:  #FFFC07;
 		border-left-color: #FFFC07;
 	}
+	.fade-in.ng-hide-remove {
+		-webkit-animation:fadeIn 2s;
+		animation:fadeIn 2s;
+	}
 	</style>
 </head>
 <body>
@@ -96,7 +101,7 @@
 	</div>
 	<hr>
 
-	<div class="panel panel-info" ng-show="curLib != ''">
+	<div class="panel panel-info fade-in" ng-show="curLib != ''">
 		<div class="panel-body">
 			<a ng-href="{{versInfo['homepage'] == 'None'? 'https://cdnjs.com/': versInfo['homepage']}}" target="_blank">
 				<span class="glyphicon glyphicon-home" aria-hidden="true"></span>
