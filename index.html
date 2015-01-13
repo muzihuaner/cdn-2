@@ -179,7 +179,10 @@
 			$scope.verInfo = [];
 			$scope.libs = [];
 			$scope.libsFiltered = [];
-			$http.get('https://dn-cdnjsjson.qbox.me/pkgs.json').then(function(res){
+			var config = {
+				headers:  {'Referer': 'http://int64ago.org'}
+			};
+			$http.get('https://dn-cdnjsjson.qbox.me/pkgs.json', config).then(function(res){
 				$scope.libs = res.data;
 				$scope.libsFiltered = $scope.libs;
 			});
@@ -196,7 +199,7 @@
 					}
 				} else if(type == 'lib'){
 					$scope.curVer = '';
-					$http.get('https://dn-cdnjsjson.qbox.me/' + $scope.curLib + '.json').then(function(res){
+					$http.get('https://dn-cdnjsjson.qbox.me/' + $scope.curLib + '.json', config).then(function(res){
 						$scope.versInfo = res.data;
 					});
 				}
