@@ -56,7 +56,7 @@
 <div class="navbar navbar-inverse navbar-static-top bs-docs-nav">
 	<div class="container">
 		<div class="navbar-header hidden-xs">
-			<a class="navbar-brand" href="#">静态JS/CSS公共CDN</a>
+			<a class="navbar-brand" href="/cdn/">静态JS/CSS公共CDN</a>
 		</div>
 	</div>
 </div>
@@ -69,22 +69,29 @@
 	<div class="row"> 
 		<div class="col-xs-4">
 			关键词过滤
-			<input class="form-control" ng-change="lib='';ver='';filtered = (libs | filter : libfilter | orderBy: 'toString()')" ng-model="libfilter"></input>
+			<input class="form-control" ng-change="onItemChange('filter')" ng-model="filterWords"></input>
 		</div>
 		<div class="col-xs-4">
-			选择库 <span class="badge ng-cloak">{{filtered.length}}</span>
-			<select class="form-control" ng-model="lib" ng-change="ver='';" ng-options="opt for opt in filtered"></select>
+			选择库 <span class="badge ng-cloak">{{libsFiltered.length}}</span>
+			<select class="form-control" ng-model="curLib" ng-change="onItemChange('lib')" ng-options="opt for opt in libsFiltered"></select>
 		</div>
 		<div class="col-xs-4">
-			选择版本 <span class="badge ng-cloak">{{data[lib]['v'].length}}</span>
-			<select class="form-control" ng-model="ver" ng-options="opt for opt in data[lib]['v']"></select>
+			选择版本 <span class="badge ng-cloak">{{versInfo['vers'].length}}</span>
+			<select class="form-control" ng-model="curVer" ng-options="opt for opt in versInfo['vers']"></select>
 		</div>
 	</div>
 	<hr>
-	<div>
+
+	<div class="panel panel-info" ng-show="curLib != ''">
+		<div class="panel-body">
+			<a ng-href="{{versInfo['homepage'] == 'None'? 'https://cdnjs.com/': versInfo['homepage']}}" target="_blank">
+				<span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+			</a>
+			{{versInfo['description']}}
+		</div>
 	</div>
 	<ul class="list-group">
-		<li class="list-group-item" ng-repeat="item in data[lib]['i']" ng-show="lib != '' && ver != ''" ng-mouseover="canShow=true" ng-mouseleave="canShow=false">
+		<li class="list-group-item" ng-repeat="item in versInfo['versinfo'][curVer]" ng-show="curLib != '' && curVer != ''" ng-mouseover="canShow=true" ng-mouseleave="canShow=false">
 			<span class="ng-cloak" ng-hide="enabled">{{showUrl(item, false)}}</span>
 			<span class="ng-cloak" ng-show="enabled">{{showUrl(item, true)}}</span>
 			<switch title="URL <-> HTML" id="enabled" name="enabled" ng-model="enabled" class="green pull-right" ng-show="canShow"></switch>
@@ -117,21 +124,37 @@
 		  }
 		});
 		var cdnjs = angular.module('cdnjs', ['ui.bootstrap', 'uiSwitch']);
-		cdnjs.controller('cdnjsCtrl', function ($scope, $http, $timeout) {
-			$scope.libfilter = '';
-			$scope.lib = '';
-			$scope.ver = '';
-			$scope.filtered = [];
-			$http.get('https://dn-cdnjscn.qbox.me/data.json').then(function(res){
-				$scope.data = res.data;
-				$scope.libs = [];
-				for(key in $scope.data){
-					$scope.libs.push(key);
-				}
-				$scope.filtered = $scope.libs;
+		cdnjs.controller('cdnjsCtrl', function ($scope, $http){
+			$scope.filterWords = '';
+			$scope.curLib = '';
+			$scope.curVer = '';
+			$scope.verInfo = [];
+			$scope.libs = [];
+			$scope.libsFiltered = [];
+			$http.get('https://dn-cdnjsjson.qbox.me/pkgs.json').then(function(res){
+				$scope.libs = res.data;
+				$scope.libsFiltered = $scope.libs;
 			});
+			$scope.onItemChange = function(type){
+				if(type == 'filter'){
+					$scope.curLib = '';
+					$scope.curVer = '';
+					$scope.versInfo = [];
+					$scope.libsFiltered = [];
+					for(lib in $scope.libs){
+						if(($scope.libs[lib].toLowerCase()).match($scope.filterWords.toLowerCase()))
+							$scope.libsFiltered.push($scope.libs[lib]);
+					$scope.libsFiltered.sort();
+					}
+				} else if(type == 'lib'){
+					$scope.curVer = '';
+					$http.get('https://dn-cdnjsjson.qbox.me/' + $scope.curLib + '.json').then(function(res){
+						$scope.versInfo = res.data;
+					});
+				}
+			}
 			$scope.showUrl = function(item, isHtml){
-				var url = 'https://dn-cdnjscn.qbox.me/ajax/libs/' + $scope.lib + '/' + $scope.ver + '/' + item;
+				var url = 'https://dn-cdnjscn.qbox.me/ajax/libs/' + $scope.curLib + '/' + $scope.curVer + '/' + item;
 				var subffix = url.split(".").pop();
 				if(subffix == "js" && isHtml) return '<script src="' + url + '"><\/script>';
 				if(subffix == "css" && isHtml) return '<link rel="stylesheet" href="' + url + '">';
