@@ -108,7 +108,7 @@
 	<hr>
 	<div class="panel panel-info fade-in" ng-show="curLib != ''">
 		<div class="panel-body">
-			<a tooltip-placement="top" tooltip="Project Site" ng-href="{{versInfo['homepage'] == 'None'? 'https://cdnjs.com/': versInfo['homepage']}}" target="_blank">
+			<a ng-href="{{versInfo['homepage'] == 'None'? 'https://cdnjs.com/': versInfo['homepage']}}" target="_blank">
 				<span class="glyphicon glyphicon-home" aria-hidden="true"></span>
 			</a>
 			<span ng-bind="versInfo['description']"></span>
