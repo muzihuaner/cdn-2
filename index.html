@@ -95,11 +95,11 @@
 			<input class="form-control" ng-change="onItemChange('filter')" ng-model="filterWords"></input>
 		</div>
 		<div class="col-xs-4">
-			选择库 <span class="badge ng-cloak">{{libsFiltered.length}}</span>
+			选择库 <span class="badge" ng-bind="libsFiltered.length"></span>
 			<select class="form-control" ng-model="curLib" ng-change="onItemChange('lib')" ng-options="opt for opt in libsFiltered"></select>
 		</div>
 		<div class="col-xs-4">
-			选择版本 <span class="badge ng-cloak">{{versInfo['vers'].length}}</span>
+			选择版本 <span class="badge" ng-bind="versInfo['vers'].length"></span>
 			<select class="form-control" ng-model="curVer" ng-options="opt for opt in versInfo['vers']"></select>
 		</div>
 	</div>
@@ -109,13 +109,13 @@
 			<a tooltip-placement="top" tooltip="Project Site" ng-href="{{versInfo['homepage'] == 'None'? 'https://cdnjs.com/': versInfo['homepage']}}" target="_blank">
 				<span class="glyphicon glyphicon-home" aria-hidden="true"></span>
 			</a>
-			{{versInfo['description']}}
+			<span ng-bind="versInfo['description']"></span>
 		</div>
 	</div>
-	<span><span class="label label-info" ng-show="curVer != ''">Click && CTRL-C</span></span>
+	<span class="label label-info" ng-show="curVer != ''">Click && CTRL-C</span>
 	<ul class="list-group">
 		<li class="list-group-item" ng-repeat="item in versInfo['versinfo'][curVer]" ng-show="curVer != ''" ng-mouseover="canShow=true" ng-mouseleave="canShow=false">
-			<span class="ng-cloak" select-text>{{showUrl(item, showHtml)['url']}}</span>
+			<span select-text ng-bind="showUrl(item, showHtml)['url']"></span>
 			<switch title="URL <-> HTML" ng-model="showHtml" class="green pull-right" ng-show="canShow && showUrl(item, showHtml)['knownType']"></switch>
 		</li>
 	</ul>
