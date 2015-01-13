@@ -111,8 +111,8 @@
 	<span><span class="label label-success" ng-show="curVer != ''">Click && CTRL-C</span></span>
 	<ul class="list-group">
 		<li class="list-group-item" ng-repeat="item in versInfo['versinfo'][curVer]" ng-show="curVer != ''" ng-mouseover="canShow=true" ng-mouseleave="canShow=false">
-			<span class="ng-cloak" select-text>{{showUrl(item, showHtml)}}</span>
-			<switch title="URL <-> HTML" ng-model="showHtml" class="green pull-right" ng-show="canShow"></switch>
+			<span class="ng-cloak" select-text>{{showUrl(item, showHtml)['url']}}</span>
+			<switch title="URL <-> HTML" ng-model="showHtml" class="green pull-right" ng-show="canShow && showUrl(item, showHtml)['knownType']"></switch>
 		</li>
 	</ul>
 	<script src="https://dn-cdnjscn.qbox.me/ajax/libs/angular.js/1.2.16/angular.min.js"></script>
@@ -200,9 +200,10 @@
 			$scope.showUrl = function(item, showHtml){
 				var url = 'https://dn-cdnjscn.qbox.me/ajax/libs/' + $scope.curLib + '/' + $scope.curVer + '/' + item;
 				var subffix = url.split(".").pop();
-				if(subffix == "js" && showHtml) return '<script src="' + url + '"><\/script>';
-				if(subffix == "css" && showHtml) return '<link rel="stylesheet" href="' + url + '">';
-				return url;
+				var knownType = (subffix == "js" || subffix == "css");
+				if(subffix == "js" && showHtml) return {'url': '<script src="' + url + '"><\/script>', 'knownType': knownType};
+				if(subffix == "css" && showHtml) return {'url': '<link rel="stylesheet" href="' + url + '">', 'knownType': knownType};
+				return {'url': url, 'knownType': knownType};
 			};
 		});
 	</script>
