@@ -1,4 +1,4 @@
 # cdn
 CDNJS mirror in Qiniu-CDN
 
-http://cdn.int64ago.org/
+https://github.com/int64ago/cdnjs-extension
