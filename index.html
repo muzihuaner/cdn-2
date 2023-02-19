@@ -3,9 +3,9 @@
 <head>
 	<title>静态JS/CSS公共CDN</title>
 	<meta charset="UTF-8">
-	<link rel="stylesheet" href="https://dn-cdnjscn.qbox.me/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css">
-	<link rel="stylesheet" href="https://dn-cdnjscn.qbox.me/ajax/libs/angular-loading-bar/0.6.0/loading-bar.min.css">
-	<link rel="stylesheet" href="https://dn-cdnjscn.qbox.me/ajax/libs/animate.css/3.2.0/animate.min.css">
+	<link rel="stylesheet" href="https://cdnjs.quickso.cn/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdnjs.quickso.cn/ajax/libs/angular-loading-bar/0.6.0/loading-bar.min.css">
+	<link rel="stylesheet" href="https://cdnjs.quickso.cn/ajax/libs/animate.css/3.2.0/animate.min.css">
 	<style>
 	body {
 		font-family: "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
@@ -131,10 +131,10 @@
 		</li>
 	</ul>
 	<!--[if lt IE 9]><script>alert('不支持IE8及以下浏览器！')</script><![endif]-->
-	<script src="https://dn-cdnjscn.qbox.me/ajax/libs/angular.js/1.2.16/angular.min.js"></script>
-	<script src="https://dn-cdnjscn.qbox.me/ajax/libs/angular-ui-bootstrap/0.12.0/ui-bootstrap-tpls.min.js"></script>
-	<script src="https://dn-cdnjscn.qbox.me/ajax/libs/angular.js/1.2.0/angular-animate.min.js"></script>
-	<script src="https://dn-cdnjscn.qbox.me/ajax/libs/angular-loading-bar/0.6.0/loading-bar.min.js"></script>
+	<script src="https://cdnjs.quickso.cn/ajax/libs/angular.js/1.2.16/angular.min.js"></script>
+	<script src="https://cdnjs.quickso.cn/ajax/libs/angular-ui-bootstrap/0.12.0/ui-bootstrap-tpls.min.js"></script>
+	<script src="https://cdnjs.quickso.cn/ajax/libs/angular.js/1.2.0/angular-animate.min.js"></script>
+	<script src="https://cdnjs.quickso.cn/ajax/libs/angular-loading-bar/0.6.0/loading-bar.min.js"></script>
 	<script>
 		angular.module('uiSwitch', []).directive('switch', function(){
 		  return {
@@ -208,7 +208,7 @@
 					}
 				} else if(type == 'lib'){
 					$scope.curVer = '';
-					$http.get('https://dn-cdnjsjson.qbox.me/' + $scope.curLib + '.json').then(function(res){
+					$http.get('https://cdnjs.quickso.cn/' + $scope.curLib + '.json').then(function(res){
 						$scope.versInfo = res.data;
 					});
 				}
@@ -219,7 +219,7 @@
 				});
 			};
 			$scope.showUrl = function(item, showHtml){
-				var url = 'https://dn-cdnjscn.qbox.me/ajax/libs/' + $scope.curLib + '/' + $scope.curVer + '/' + item;
+				var url = 'https://cdnjs.quickso.cn/ajax/libs/' + $scope.curLib + '/' + $scope.curVer + '/' + item;
 				var subffix = url.split(".").pop();
 				var knownType = (subffix == "js" || subffix == "css");
 				if(subffix == "js" && showHtml) return {'url': '<script src="' + url + '"><\/script>', 'knownType': knownType};
